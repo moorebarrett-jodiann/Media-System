@@ -6,9 +6,8 @@
         public string Name { get; set; }
         public HashSet<PlaylistSong> PlaylistSongs { get; set; } = new HashSet<PlaylistSong>();
         public Playlist() { }
-        public Playlist(int id, string name)
+        public Playlist(string name)
         {
-            Id = id;
             Name = name;
         }
     }
