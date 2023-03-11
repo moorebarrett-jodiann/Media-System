@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
 <div>
     <h4>Playlist</h4>
     <hr />
@@ -19,7 +17,66 @@
         </dd>
     </dl>
 </div>
+<hr />
+<table class="table">
+    <tr>
+        @{
+            <td><h4>Songs</h4></td>
+            TimeSpan time1 = TimeSpan.FromSeconds(@ViewBag.TotalTime);
+            <td>Total Time: @time1.Hours:@time1.Minutes:@time1.Seconds</td>
+            <td>Number of Songs: @ViewBag.TotalCount</td>
+            <td><a asp-controller="Song" asp-action="Index">All Songs</a></td>
+        }
+    </tr>
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Song Title
+            </th>
+            <th>
+                Album
+            </th>
+            <th>
+                Song Duration
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (PlaylistSong ps in Model.PlaylistSongs)
+        {
+            <tr>
+                <td>
+                    <p>@ps.Song.Title</p>
+
+                    <p style="color:darkgray;">(
+                    @foreach (SongContributor sc in @ps.Song.SongContributors)
+                    {
+                       <span>@sc.Artist.Name, </span> 
+                    }
+                    )</p>
+                </td>
+                <td>
+                    @ps.Song.Album.Title
+                </td>
+                <td>
+                    @{
+                        TimeSpan time2 = TimeSpan.FromSeconds(@ps.Song.DurationSeconds);
+                        <p>@time2.Minutes:@time2.Seconds</p>
+                    }                    
+                </td>
+                <td>
+                    <form asp-action="RemoveFromPlaylist" method="post" asp-route-songid="@ps.Song.Id">
+                        <input type="hidden" asp-for="@Model.Id" asp-route-id="Id" />
+                        <input type="submit" value="Remove From Playlist" class="btn btn-danger" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">All Playlists</a>
 </div>

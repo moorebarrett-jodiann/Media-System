@@ -34,11 +34,29 @@ namespace MusicSystem.Controllers
             }
 
             var playlist = await _context.Playlist
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(ps => ps.PlaylistSongs)
+                .ThenInclude(s => s.Song)
+                .ThenInclude(a => a.Album)
+                .Include(ps => ps.PlaylistSongs)
+                .ThenInclude(s => s.Song)
+                .ThenInclude(sc => sc.SongContributors)
+                .ThenInclude(ar => ar.Artist)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync<Playlist>();
+                
             if (playlist == null)
             {
                 return NotFound();
             }
+
+            int sum = 0;
+            foreach(PlaylistSong ps in playlist.PlaylistSongs)
+            {
+                sum += ps.Song.DurationSeconds;
+            }
+
+            ViewBag.TotalTime = sum;
+            ViewBag.TotalCount = playlist.PlaylistSongs.Count;
 
             return View(playlist);
         }
@@ -114,6 +132,19 @@ namespace MusicSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(playlist);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromPlaylist(int songid, int id)
+        {
+            PlaylistSong playlistSong = _context.PlaylistSong.FirstOrDefault(ps => ps.Song.Id == songid && ps.Playlist.Id == id);
+            if (playlistSong != null)
+            {
+                _context.PlaylistSong.Remove(playlistSong);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { Id = id });
         }
 
         // GET: Playlist/Delete/5
