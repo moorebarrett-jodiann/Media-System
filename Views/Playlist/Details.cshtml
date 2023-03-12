@@ -22,8 +22,11 @@
     <tr>
         @{
             <td><h4>Songs</h4></td>
+            /*
+            * https://phrase.com/blog/posts/format-hhmmss-timespan-separators-culture-aware-manner/
+            * **/
             TimeSpan time1 = TimeSpan.FromSeconds(@ViewBag.TotalTime);
-            <td>Total Time: @time1.Hours:@time1.Minutes:@time1.Seconds</td>
+            <td>Total Time: @time1.ToString(@"hh\:mm\:ss")</td>
             <td>Number of Songs: @ViewBag.TotalCount</td>
             <td><a asp-controller="Song" asp-action="Index">All Songs</a></td>
         }
@@ -39,7 +42,7 @@
                 Album
             </th>
             <th>
-                Song Duration
+                Duration
             </th>
             <th></th>
         </tr>
@@ -51,12 +54,14 @@
                 <td>
                     <p>@ps.Song.Title</p>
 
-                    <p style="color:darkgray;">(
-                    @foreach (SongContributor sc in @ps.Song.SongContributors)
-                    {
-                       <span>@sc.Artist.Name, </span> 
+                    <p style="color:darkgray;">By 
+                    @{
+                        /*
+                        * https://www.codingame.com/playgrounds/213/using-c-linq---a-practical-overview/aggregate
+                        */
+                        @ps.Song.SongContributors.Select(sc => sc.Artist.Name).Aggregate((concat, value) => $"{concat}, {value}");
                     }
-                    )</p>
+                    </p>
                 </td>
                 <td>
                     @ps.Song.Album.Title
@@ -64,7 +69,7 @@
                 <td>
                     @{
                         TimeSpan time2 = TimeSpan.FromSeconds(@ps.Song.DurationSeconds);
-                        <p>@time2.Minutes:@time2.Seconds</p>
+                        <p>@time2.ToString(@"hh\:mm\:ss")</p>
                     }                    
                 </td>
                 <td>

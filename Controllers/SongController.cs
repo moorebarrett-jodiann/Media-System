@@ -20,10 +20,37 @@ namespace MusicSystem.Controllers
         }
 
         // GET: Song
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? albumid)
         {
-            var dBContext = _context.Song.Include(s => s.Album);
-            return View(await dBContext.ToListAsync());
+            if (albumid == null || albumid < 1)
+            {
+                ViewBag.FilterAlbum = false;
+                return View(await _context.Song.ToListAsync());
+            }
+            else
+            {
+                var songs = await _context.Song
+                    .Include(a => a.Album)
+                    .Where(s => s.AlbumId == albumid)
+                    .ToListAsync<Song>();
+
+                if (songs == null)
+                {
+                    return NotFound();
+                }
+
+                int sum = 0;
+                foreach (Song s in songs)
+                {
+                    sum += s.DurationSeconds;
+                }
+
+                ViewBag.FilterAlbum = true;
+                ViewBag.TotalTime = sum;
+                ViewBag.AlbumTitle = _context.Album.Where(a => a.Id == albumid).Select(a => a.Title).SingleOrDefault().ToString();
+
+                return View(songs);
+            }
         }
 
         // GET: Song/Details/5

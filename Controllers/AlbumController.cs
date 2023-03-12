@@ -20,9 +20,28 @@ namespace MusicSystem.Controllers
         }
 
         // GET: Album
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? artistid)
         {
-              return View(await _context.Album.ToListAsync());
+            if (artistid == null || artistid < 1)
+            {
+                return View(await _context.Album.ToListAsync());
+            } else
+            {
+                var albums = await _context.Album
+                    .Include(s => s.Songs)
+                    .ThenInclude(sc => sc.SongContributors)
+                    .ThenInclude(art => art.Artist)
+                    .Where(art => art.Id == artistid)
+                    .ToListAsync<Album>();
+
+                if (albums == null)
+                {
+                    return NotFound();
+                }
+
+                return View(albums);
+            }
+            
         }
 
         // GET: Album/Details/5
@@ -31,16 +50,12 @@ namespace MusicSystem.Controllers
             if (id == null || _context.Album == null)
             {
                 return NotFound();
-            }
-
-            var album = await _context.Album
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (album == null)
+            } 
+            else
             {
-                return NotFound();
+                return RedirectToAction("Index", "Song", new { albumid = id });
             }
 
-            return View(album);
         }
 
         // GET: Album/Create

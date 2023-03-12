@@ -5,22 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h4>All Songs</h4>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@{
+    if (ViewBag.FilterAlbum)
+    {
+        <table class="table">
+            <tr>
+                @{
+                    <td><h6>Album Title: @ViewBag.AlbumTitle</h6></td>
+                    /*
+                    * https://phrase.com/blog/posts/format-hhmmss-timespan-separators-culture-aware-manner/
+                    * **/
+                    TimeSpan time1 = TimeSpan.FromSeconds(@ViewBag.TotalTime);
+                    <td>Total Time: @time1.ToString(@"hh\:mm\:ss")</td>
+                    <td>Number of Songs: @Model.Count()</td>
+                }
+            </tr>
+        </table>
+    }
+}
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DurationSeconds)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Album)
+                Duration
             </th>
             <th></th>
         </tr>
@@ -32,15 +44,13 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DurationSeconds)
+                @{
+                    TimeSpan time2 = TimeSpan.FromSeconds(item.DurationSeconds);
+                        <p>@time2.ToString(@"hh\:mm\:ss")</p>
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Album.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="AddToPlaylist" asp-route-id="@item.Id">Add to Playlist</a>
             </td>
         </tr>
 }
