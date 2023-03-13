@@ -1,0 +1,24 @@
+﻿@model MusicSystem.Models.ViewModels.PlaylistSongVM
+
+<h4>Select Playlist for Song: @Model.Song.Title</h4>
+<table class="table">
+    <tr>
+        <form asp-action="AddToPlaylist" method="post">
+            <td>
+                <select asp-for="PlaylistId" asp-items="Model.Playlists"></select>
+                <input type="hidden" value="@Model.SongId" asp-for="SongId" />
+                <input type="submit" value="Submit" />
+            </td>
+            <td>
+                @if(Model.IsAdded)
+                {
+                    <p style="color:forestgreen;">@ViewBag.Message</p>
+                } 
+                else
+                {
+                    <p style="color:red;">@ViewBag.Message</p>
+                }           
+            </td>
+        </form>
+    </tr>
+</table>

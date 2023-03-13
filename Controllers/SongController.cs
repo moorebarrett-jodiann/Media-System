@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Numerics;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicSystem.Data;
 using MusicSystem.Models;
+using MusicSystem.Models.ViewModels;
 
 namespace MusicSystem.Controllers
 {
@@ -147,6 +151,51 @@ namespace MusicSystem.Controllers
             }
             ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "Id", "Id", song.AlbumId);
             return View(song);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddToPlaylist(int songid)
+        {
+            Song song = _context.Song.First(s => s.Id == songid);
+            PlaylistSongVM vm = new PlaylistSongVM(_context.Playlist.ToList(), song);
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToPlaylist([Bind("PlaylistId", "SongId")] PlaylistSongVM vm)
+        {
+            try
+            {
+                Song song = _context.Song.First(s => s.Id == vm.SongId);
+                
+                if (!_context.PlaylistSong.Any(ps => ps.SongId == vm.SongId  && ps.PlaylistId == vm.PlaylistId))
+                {
+                    Playlist playlist = _context.Playlist.First(p => p.Id == vm.PlaylistId);
+
+                    // create new playlist song relationship
+                    PlaylistSong playlistSong = new PlaylistSong();
+                    playlistSong.Playlist = playlist;
+                    playlistSong.Song = song;
+
+                    _context.PlaylistSong.Add(playlistSong);
+                    _context.SaveChanges();
+
+                    vm.IsAdded = true;
+                    ViewBag.Message = $"Successfully added Song: {song.Title} to Playlist: {playlist.Name}";
+                }
+                else
+                {
+                    ViewBag.Message = "Song is already added to Playlist";
+                }
+
+                vm.Song = song;
+                vm.PopulateList(_context.Playlist.ToList());
+                return View(vm);
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
         }
 
         // GET: Song/Delete/5

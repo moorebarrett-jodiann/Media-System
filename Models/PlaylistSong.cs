@@ -8,7 +8,10 @@
         public int SongId { get; set; }
         public virtual Playlist Playlist { get; set; }
         public int PlaylistId { get; set; }
-        public PlaylistSong() { }
+        public PlaylistSong() 
+        {
+            TimeAdded = DateTime.Now;
+        }
         public PlaylistSong(DateTime timeAdded, Song song, Playlist playlist)
         {
             TimeAdded = timeAdded;
