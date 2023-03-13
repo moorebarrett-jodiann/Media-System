@@ -4,5 +4,14 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h4>This is a Music System Web App</h4>
 </div>
+<br /><br />
+<table class="table">
+    <tr>
+        <td><a asp-action="Index" asp-controller="Album" target="_blank">All Albums</a></td>
+        <td><a asp-action="Index" asp-controller="Song" target="_blank">All Songs</a></td>
+        <td><a asp-action="Index" asp-controller="Playlist" target="_blank">All Playlists</a></td>
+        <td><a asp-action="Index" asp-controller="Artist" target="_blank">All Artists</a></td>
+    </tr>
+</table>
