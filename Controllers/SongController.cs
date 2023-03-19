@@ -76,28 +76,75 @@ namespace MusicSystem.Controllers
             return View(song);
         }
 
-        // GET: Song/Create
+        //// GET: Song/Create
+        //public IActionResult Create()
+        //{
+        //    ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "Id", "Id");
+        //    return View();
+        //}
+
+        //// POST: Song/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,Title,DurationSeconds,AlbumId")] Song song)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(song);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "Id", "Id", song.AlbumId);
+        //    return View(song);
+        //}
+
+        [HttpGet]
         public IActionResult Create()
         {
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "Id", "Id");
-            return View();
+            SongVM vm = new SongVM(_context.Artist.ToList(), _context.Album.ToList());
+            return View(vm);
         }
 
-        // POST: Song/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,DurationSeconds,AlbumId")] Song song)
+        public async Task<IActionResult> Create([Bind("AlbumId", "ArtistId", "Title", "DurationSeconds")] SongVM vm)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(song);
+                // verify album and artist
+                Album album = _context.Album.FirstOrDefault(a => a.Id == vm.AlbumId);
+                Artist artist = _context.Artist.FirstOrDefault(ar => ar.Id == vm.ArtistId);
+                if (album == null)
+                {
+                    ViewBag.Message = "Error saving song: Album does not exist.";
+                    vm.PopulateArtistsAndAlbums(_context.Artist.ToList(), _context.Album.ToList());
+                    return View(vm);
+                }
+                if (artist == null)
+                {
+                    ViewBag.Message = "Error saving song: Artist does not exist.";
+                    vm.PopulateArtistsAndAlbums(_context.Artist.ToList(), _context.Album.ToList());
+                    return View(vm);
+                }
+
+                // save song to context
+                Song song = new Song(vm.Title, vm.DurationSeconds, album);
+                _context.Song.Add(song);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                // add artist to song
+                SongContributor sc = new SongContributor(artist, song);
+                artist.SongContributors.Add(sc);
+                _context.SongContributor.Add(sc);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
             }
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "Id", "Id", song.AlbumId);
-            return View(song);
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
         }
 
         // GET: Song/Edit/5
@@ -156,7 +203,7 @@ namespace MusicSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> AddToPlaylist(int songid)
         {
-            Song song = _context.Song.First(s => s.Id == songid);
+            Song song = _context.Song.FirstOrDefault(s => s.Id == songid);
             PlaylistSongVM vm = new PlaylistSongVM(_context.Playlist.ToList(), song);
             return View(vm);
         }
@@ -166,11 +213,11 @@ namespace MusicSystem.Controllers
         {
             try
             {
-                Song song = _context.Song.First(s => s.Id == vm.SongId);
+                Song song = _context.Song.FirstOrDefault(s => s.Id == vm.SongId);
                 
                 if (!_context.PlaylistSong.Any(ps => ps.SongId == vm.SongId  && ps.PlaylistId == vm.PlaylistId))
                 {
-                    Playlist playlist = _context.Playlist.First(p => p.Id == vm.PlaylistId);
+                    Playlist playlist = _context.Playlist.FirstOrDefault(p => p.Id == vm.PlaylistId);
 
                     // create new playlist song relationship
                     PlaylistSong playlistSong = new PlaylistSong();

@@ -7,8 +7,12 @@
 
 <h4>All Songs</h4>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
 @{
-    if (ViewBag.FilterAlbum)
+    if (ViewBag.FilterAlbum != null && ViewBag.FilterAlbum)
     {
         <table class="table">
             <tr>

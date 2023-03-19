@@ -13,7 +13,6 @@ namespace MusicSystem.Data
             : base(options)
         {
         }
-
         public DbSet<Song> Song { get; set; } = default!;
         public DbSet<Artist> Artist { get; set; } = default!;
         public DbSet<Album> Album { get; set; } = default!;
