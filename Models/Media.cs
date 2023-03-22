@@ -41,6 +41,7 @@ namespace MusicSystem.Models
 
     public class Episode : Media
     {
+        [Display(Name = "Air Date")]
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]

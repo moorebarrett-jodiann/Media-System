@@ -70,7 +70,7 @@ namespace MusicSystem.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            EpisodeVM vm = new EpisodeVM(_context.Podcast.ToList());
+            EpisodeVM vm = new EpisodeVM(_context.Artist.ToList(), _context.Podcast.ToList());
             return View(vm);
         }
 
@@ -80,12 +80,13 @@ namespace MusicSystem.Controllers
             try
             {
                 // verify podcast and artist
-                Podcast podcast = _context.Podcast.FirstOrDefault(p => p.Id == vm.PodcastId);
+                Podcast? podcast = _context.Podcast.FirstOrDefault(p => p.Id == vm.PodcastId);
+                Artist? artist = _context.Artist.FirstOrDefault(ar => ar.Id == vm.ArtistId);
 
                 if (podcast == null)
                 {
                     ViewBag.Message = "Error saving episode: Podcast does not exist.";
-                    vm.PopulatePodcasts(_context.Podcast.ToList());
+                    vm.PopulatePodcastsAndArtists(_context.Artist.ToList(), _context.Podcast.ToList());
                     return View(vm);
                 }
 
@@ -94,6 +95,15 @@ namespace MusicSystem.Controllers
                 podcast.Episodes.Add(episode);
                 _context.Episode.Add(episode);
                 await _context.SaveChangesAsync();
+
+                if(artist != null)
+                {
+                    EpisodeArtist ea = new EpisodeArtist(artist, episode);
+                    episode.GuestArtists.Add(ea);
+                    artist.EpisodeArtists.Add(ea);
+                    _context.EpisodeArtist.Add(ea);
+                    await _context.SaveChangesAsync();
+                }
 
                 return RedirectToAction("Index");
             }

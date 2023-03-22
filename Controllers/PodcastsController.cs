@@ -40,6 +40,7 @@ namespace MusicSystem.Controllers
                     return NotFound();
                 }
 
+                ViewBag.ListenerListName = _context.ListenerList.Where(ll => ll.Id == listenerlistid).Select(ll => ll.Description).FirstOrDefault();
                 return View(podcasts);
             }
 

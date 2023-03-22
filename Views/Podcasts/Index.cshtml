@@ -5,7 +5,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>All Podcasts</h4>
+@{
+    if (ViewBag.ListenerListName != null)
+    {
+        <h4>@ViewBag.ListenerListName</h4>
+    } else
+    {
+        <h4>All Podcasts</h4>        
+    }
+}
 
 <p>
     <a asp-action="Create">Create New</a>
