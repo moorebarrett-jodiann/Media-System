@@ -21,16 +21,12 @@
                     <table>
                         <tr>
                             <td>
-                                <select name="SortOption" asp-route-sortoption="SortOption">
+                                <select name="SortOrder" class="form-control" asp-items="Html.GetEnumSelectList<SortOrder>()">
                                     <option value="">--Sort By--</option>
-                                    <option value="duration-asc">Duration Ascending</option>
-                                    <option value="duration-desc">Duration Descending</option>
-                                    <option value="airdate-asc">Air Date Ascending</option>
-                                    <option value="airdate-desc">Air Date Descending</option>
                                 </select>
                                 <input type="hidden" value="@Model.Id" asp-for="Id" />
                             </td>
-                            <td><input type="submit" value="Submit" /></td>
+                            <td><input type="submit" value="Submit" class="btn btn-primary" /></td>
                         </tr>
                     </table>
                 </form>

@@ -80,11 +80,11 @@ namespace MusicSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Details([Bind("Id", "SortOption")] int Id, string SortOption)
+        public async Task<IActionResult> Details([Bind("Id", "SortOrder")] int Id, SortOrder SortOrder)
         {
             Podcast? podcast = null;
 
-            if(SortOption == "duration-asc")
+            if (SortOrder == SortOrder.DurationAscending)
             {
                 podcast = await _context.Podcast
                 .Include(p => p.Episodes.OrderBy(p => p.DurationInSeconds))
@@ -92,8 +92,8 @@ namespace MusicSystem.Controllers
                 .ThenInclude(ga => ga.Artist)
                 .Where(p => p.Id == Id)
                 .FirstOrDefaultAsync<Podcast>();
-            } 
-            else if (SortOption == "duration-desc")
+            }
+            else if (SortOrder == SortOrder.DurationDescending)
             {
                 podcast = await _context.Podcast
                     .Include(p => p.Episodes.OrderByDescending(p => p.DurationInSeconds))
@@ -102,7 +102,7 @@ namespace MusicSystem.Controllers
                     .Where(p => p.Id == Id)
                     .FirstOrDefaultAsync<Podcast>();
             }
-            else if (SortOption == "airdate-asc")
+            else if (SortOrder == SortOrder.AirDateAscending)
             {
                 podcast = await _context.Podcast
                     .Include(p => p.Episodes.OrderBy(p => p.AirDate))
@@ -110,7 +110,7 @@ namespace MusicSystem.Controllers
                     .ThenInclude(ga => ga.Artist)
                     .Where(p => p.Id == Id)
                     .FirstOrDefaultAsync<Podcast>();
-            } 
+            }
             else
             {
                 podcast = await _context.Podcast

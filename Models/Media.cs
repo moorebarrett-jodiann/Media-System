@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MusicSystem.Models
 {
@@ -59,5 +60,17 @@ namespace MusicSystem.Models
             AirDate = airDate;
             Podcast = podcast;
         }
+    }
+
+    public enum SortOrder
+    {
+        [Display(Name = "Duration Ascending")]
+        DurationAscending,
+        [Display(Name = "Duration Descending")]
+        DurationDescending,
+        [Display(Name = "Air Date Ascending")]
+        AirDateAscending,
+        [Display(Name = "Air Date Descending")]
+        AirDateDescending
     }
 }
