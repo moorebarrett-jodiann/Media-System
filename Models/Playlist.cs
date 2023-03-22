@@ -6,9 +6,8 @@ namespace MusicSystem.Models
     {
         public int Id { get; set; }
 
-        [Display(Name = "Playlist Name")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Playlist Name must be between 2 and 100 characters in length.")]
-        [Required(ErrorMessage = "Please enter Playlist Name")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 100 characters in length.")]
+        [Required(ErrorMessage = "Please enter Name")]
         public string Name { get; set; }
         public HashSet<PlaylistSong> PlaylistSongs { get; set; } = new HashSet<PlaylistSong>();
         public Playlist() { }

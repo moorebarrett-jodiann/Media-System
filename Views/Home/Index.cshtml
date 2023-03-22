@@ -4,14 +4,36 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <h4>This is a Music System Web App</h4>
+    <h4>This is a Media Management Web App</h4>
 </div>
-<br /><br />
-<table class="table">
-    <tr>
-        <td><a asp-action="Index" asp-controller="Album" target="_blank">All Albums</a></td>
-        <td><a asp-action="Index" asp-controller="Song" target="_blank">All Songs</a></td>
-        <td><a asp-action="Index" asp-controller="Playlist" target="_blank">All Playlists</a></td>
-        <td><a asp-action="Index" asp-controller="Artist" target="_blank">All Artists</a></td>
-    </tr>
-</table>
+<br />
+<br />
+<div style="display:grid; place-items:center;">
+    @{
+        if(ViewBag.ErrorMessage != null)
+        {
+            <h6>@ViewBag.ErrorMessage</h6>
+        } else
+        {
+            <table class="table" style="text-align:center;">
+                <tr>
+                    <td><a asp-action="Index" asp-controller="Albums" target="_blank">All Albums</a></td>
+                    <td><a asp-action="Index" asp-controller="Songs" target="_blank">All Songs</a></td>
+                    <td><a asp-action="Index" asp-controller="Playlists" target="_blank">All Playlists</a></td>
+                    <td><a asp-action="Index" asp-controller="Artists" target="_blank">All Artists</a></td>
+                </tr>
+            </table>
+            <br />
+            <hr />
+            <br />
+            <table class="table" style="text-align:center;">
+                <tr>
+                    <td><a asp-action="Index" asp-controller="Podcasts" target="_blank">All Podcasts</a></td>
+                    <td><a asp-action="Index" asp-controller="Episodes" target="_blank">All Episodes</a></td>
+                    <td><a asp-action="Index" asp-controller="ListenerLists" target="_blank">All Listener Lists</a></td>
+                </tr>
+            </table>
+
+        }
+    }
+</div>

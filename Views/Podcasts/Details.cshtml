@@ -1,0 +1,84 @@
+﻿@model MusicSystem.Models.Podcast
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h4>Podcast :@Html.DisplayFor(model => model.Title)</h4>
+</div>
+
+<table class="table">
+    <tr>
+        @{
+            <td><h4>Episodes</h4></td>
+            TimeSpan time1 = TimeSpan.FromSeconds(@ViewBag.TotalTime);
+            <td>Total Time: @time1.ToString(@"hh\:mm\:ss")</td>
+            <td>Number of Episodes: @ViewBag.TotalCount</td>
+            <td>
+                <form asp-action="Details" method="post" >
+                    <table>
+                        <tr>
+                            <td>
+                                <select name="SortOption" asp-route-sortoption="SortOption">
+                                    <option value="">--Sort By--</option>
+                                    <option value="duration-asc">Duration Ascending</option>
+                                    <option value="duration-desc">Duration Descending</option>
+                                    <option value="airdate-asc">Air Date Ascending</option>
+                                    <option value="airdate-desc">Air Date Descending</option>
+                                </select>
+                                <input type="hidden" value="@Model.Id" asp-for="Id" />
+                            </td>
+                            <td><input type="submit" value="Submit" /></td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+        }
+    </tr>
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Air Date
+            </th>
+            <th>
+                Duration
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Episode e in Model.Episodes)
+        {
+            <tr>
+                <td>
+                    <p>@e.Title</p>
+
+                    <p style="color:darkgray;">
+                        Guest Artists: 
+                        @{
+                            @e.GuestArtists.Select(ga => ga.Artist.Name).Aggregate((concat, value) => $"{concat}, {value}");
+                        }
+                    </p>
+                </td>
+                <td>
+                    @e.AirDate.ToLongDateString()
+                </td>
+                <td>
+                    @{
+                        TimeSpan time2 = TimeSpan.FromSeconds(@e.DurationInSeconds);
+                        <p>@time2.ToString(@"hh\:mm\:ss")</p>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-action="Index">All Podcasts</a>
+</div>

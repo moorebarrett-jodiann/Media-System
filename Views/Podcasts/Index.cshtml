@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MusicSystem.Models.Podcast>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>All Podcasts</h4>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@{
+    if(Model == null || Model.Count() == 0)
+    {
+        <p>No Podcasts Available</p>
+    } else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="AddToListenerList" asp-route-podcastid="@item.Id">Add to Listener List</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

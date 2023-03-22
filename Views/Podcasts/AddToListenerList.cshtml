@@ -1,0 +1,29 @@
+﻿@model MusicSystem.Models.ViewModels.PodcastListenerListVM
+
+<h4>Select Listener List for Podcast: @Model.Podcast.Title</h4>
+
+@{
+
+    if(Model.ListenerLists.Count == 0)
+    {
+        <p style="color:red;">@ViewBag.ErrorMessage</p>
+        <a asp-action="Index">View All Podcasts</a>
+    } else
+    {
+        <table class="table">
+            <tr>
+                <form asp-action="AddToListenerList" method="post">
+                <td>
+                    <select asp-for="ListenerListId" asp-items="Model.ListenerLists"></select>
+                    <input type="hidden" value="@Model.PodcastId" asp-for="PodcastId" />
+                    <input type="submit" value="Submit" />
+                </td>
+                <td>
+                    <p style="color:forestgreen;">@ViewBag.Message</p>
+                </td>
+                </form>
+            </tr>
+        </table>
+
+    }
+}

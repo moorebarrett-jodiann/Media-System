@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MusicSystem.Models.Song>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h4>All Songs</h4>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@{
+    if (ViewBag.FilterAlbum)
+    {
+        <table class="table">
+            <tr>
+                @{
+                    <td><h6>Album Title: @ViewBag.AlbumTitle</h6></td>
+                    /*
+                    * https://phrase.com/blog/posts/format-hhmmss-timespan-separators-culture-aware-manner/
+                    * **/
+                    TimeSpan time1 = TimeSpan.FromSeconds(@ViewBag.TotalTime);
+                    <td>Total Time: @time1.ToString(@"hh\:mm\:ss")</td>
+                    <td>Number of Songs: @Model.Count()</td>
+                }
+            </tr>
+        </table>
+    }
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DurationInSeconds)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrackNumber)
+            </th>             
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @{
+                        TimeSpan time2 = TimeSpan.FromSeconds(item.DurationInSeconds);
+                        <p>@time2.ToString(@"hh\:mm\:ss")</p>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TrackNumber)
+                </td>              
+                <td>
+                    <a asp-action="AddToPlaylist" asp-route-songid="@item.Id">Add to Playlist</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MusicSystem.Models.Episode>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AirDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DurationInSeconds)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+                    @{
+                        if(item.GuestArtists.Count > 0)
+                        {            
+                            <p style="color:darkgray;">
+                                Guest Artists: 
+                                @{
+                                    @item.GuestArtists.Select(ga => ga.Artist.Name).Aggregate((concat, value) => $"{concat}, {value}");
+                                }
+                            </p>
+                        }
+                    }
+            </td>
+            <td>
+                @item.AirDate.ToLongDateString()
+            </td>
+            <td>
+                @{
+                    TimeSpan time2 = TimeSpan.FromSeconds(item.DurationInSeconds);
+                    <p>@time2.ToString(@"hh\:mm\:ss")</p>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
