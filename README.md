@@ -42,7 +42,22 @@ Below are the application entities and their relationships:
 
 ```Note: An Episode can never appear in a Playlist; A Song can never appear in a Podcast```
 
-
+###### Entity Relationship Diagram
 <img src="https://github.com/moorebarrett-jodiann/Media-System/blob/main/screenshots/Media-System-ERD.png" width="85%">
+
+###### Playlist Details Page
 <img src="https://github.com/moorebarrett-jodiann/Media-System/blob/main/screenshots/playlist-details.png" width="85%">
+
+###### Podcast Details Page
 <img src="https://github.com/moorebarrett-jodiann/Media-System/blob/main/screenshots/podcast-details.png" width="85%">
+
+### Demo Instructions
+
+- Clone repository in Visual Studio
+- Replace the ```Data Source``` with your server name, and the ```Database``` value with the name you want to provide your Database in Connection String property in appsettings.json
+    ```json
+        "ConnectionStrings": {
+            "DBContext": "Data Source=DBServerName;Integrated Security=True;Database=ChooseDatabaseName;TrustServerCertificate=True;"
+        }
+    ```
+- Run Application
