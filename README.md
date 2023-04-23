@@ -42,4 +42,4 @@ Below are the application entities and their relationships:
 
 ```Note: An Episode can never appear in a Playlist; A Song can never appear in a Podcast```
 
-![Media System Entity Relational Diagram](./MusicSystem/screenshots/Music-System-ERD.png?raw=true "Media System Entity Relational Diagram")
+![Media System Entity Relational Diagram](./MusicSystem/screenshots/Media-System-ERD.png?raw=true "Media System Entity Relational Diagram")
