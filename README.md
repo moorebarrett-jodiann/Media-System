@@ -43,4 +43,4 @@ Below are the application entities and their relationships:
 ```Note: An Episode can never appear in a Playlist; A Song can never appear in a Podcast```
 
 
-<img src="https://github.com/moorebarrett-jodiann/Media-System/blob/main/screenshots/Media-System-ERD.png" width="50%">
+<img src="https://github.com/moorebarrett-jodiann/Media-System/blob/main/screenshots/Media-System-ERD.png" width="70%">
