@@ -44,3 +44,5 @@ Below are the application entities and their relationships:
 
 
 <img src="https://github.com/moorebarrett-jodiann/Media-System/blob/main/screenshots/Media-System-ERD.png" width="85%">
+<img src="https://github.com/moorebarrett-jodiann/Media-System/blob/main/screenshots/playlist-details.png" width="85%">
+<img src="https://github.com/moorebarrett-jodiann/Media-System/blob/main/screenshots/podcast-details.png" width="85%">
