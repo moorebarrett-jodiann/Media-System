@@ -7,7 +7,7 @@
 
 ### Description
 
-Minimal C# .Net Full-Stack Media Management Application that mimicks Spotify.
+C# .Net Full-Stack Media Management Application that mimicks Spotify.
 
 Application was developed using the following technologies and design principles:
 - DotNet Entity Framework [Code-First development approach](https://learn.microsoft.com/en-us/aspnet/mvc/overview/getting-started/getting-started-with-ef-using-mvc/creating-an-entity-framework-data-model-for-an-asp-net-mvc-application)
